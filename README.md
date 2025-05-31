@@ -41,10 +41,52 @@ A Model Context Protocol (MCP) server that provides essential Rust development t
 ### Build from source
 
 ```bash
-git clone <repository>
+git clone https://github.com/lh/rust-mcp-server
 cd rust-mcp-server
 cargo build --release
 ```
+
+## Claude Code Integration
+
+### Quick Install
+
+```bash
+# Clone and build the server
+git clone https://github.com/lh/rust-mcp-server
+cd rust-mcp-server
+cargo build --release
+
+# Add to Claude Code (adjust the project path as needed)
+claude mcp add rust-tools -s user -- $(pwd)/target/release/rust-mcp-server --project-path ~/Code
+
+# Verify installation
+claude mcp list | grep rust-tools
+```
+
+### Alternative Installation Methods
+
+#### Using absolute path:
+```bash
+claude mcp add rust-tools -s user -- /path/to/rust-mcp-server/target/release/rust-mcp-server --project-path /path/to/your/rust/projects
+```
+
+#### Project-specific installation:
+```bash
+# Navigate to your Rust project
+cd /path/to/your/rust/project
+
+# Add the server with current directory as project path
+claude mcp add rust-tools -s project -- /path/to/rust-mcp-server/target/release/rust-mcp-server --project-path .
+```
+
+### Verify Connection
+
+After installation, restart Claude Code and check the server status:
+```
+/mcp
+```
+
+You should see `rust-tools: connected` in the list.
 
 ## Usage
 
@@ -57,6 +99,16 @@ cargo build --release
 # Specify project path
 ./target/release/rust-mcp-server --project-path /path/to/rust/project
 ```
+
+### Using with Claude Code
+
+Once installed, you can use natural language to invoke Rust tools:
+
+- "Check this Rust code for errors" → runs `cargo check`
+- "Lint my Rust project" → runs `cargo clippy`
+- "Format this Rust file" → runs `rustfmt`
+- "Run the tests" → runs `cargo test`
+- "Build the project in release mode" → runs `cargo build --release`
 
 ### MCP Integration
 
@@ -180,6 +232,43 @@ The server provides detailed error information for:
 - Process execution failures
 - File system errors
 
+## Troubleshooting
+
+### Server Not Connecting
+
+If you see connection errors in Claude Code:
+
+1. **Ensure the binary is built:**
+   ```bash
+   cd /path/to/rust-mcp-server
+   cargo build --release
+   ls -la target/release/rust-mcp-server  # Should exist and be executable
+   ```
+
+2. **Check the -- separator:**
+   ```bash
+   # ✅ Correct
+   claude mcp add rust-tools -- /path/to/rust-mcp-server/target/release/rust-mcp-server
+   
+   # ❌ Incorrect (missing --)
+   claude mcp add rust-tools /path/to/rust-mcp-server/target/release/rust-mcp-server
+   ```
+
+3. **Test the server manually:**
+   ```bash
+   cd /path/to/rust-mcp-server
+   python3 test_server.py
+   ```
+
+4. **Check logs:**
+   Look for error messages when running `claude --mcp-debug`
+
+### Common Issues
+
+- **"cargo: command not found"**: Ensure Rust is installed and in your PATH
+- **"failed to find cargo.toml"**: Make sure `--project-path` points to a Rust project
+- **Server disconnects immediately**: Check that the binary path is absolute, not relative
+
 ## Contributing
 
 1. Fork the repository
@@ -190,7 +279,7 @@ The server provides detailed error information for:
 
 ## License
 
-[License information]
+MIT License
 
 ## Changelog
 
