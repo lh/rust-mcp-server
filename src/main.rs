@@ -82,7 +82,7 @@ async fn handle_request(rust_tools: &RustTools, request: McpRequest) -> McpRespo
                     },
                     "serverInfo": {
                         "name": "rust-mcp-server",
-                        "version": "0.1.0"
+                        "version": "0.1.1"
                     }
                 })),
                 error: None,

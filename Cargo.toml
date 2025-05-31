@@ -1,6 +1,6 @@
 [package]
 name = "rust-mcp-server"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["Claude Code"]
 description = "A Model Context Protocol server for Rust development tools (clippy, rustfmt, cargo check, cargo test)"
