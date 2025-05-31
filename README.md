@@ -268,6 +268,7 @@ If you see connection errors in Claude Code:
 - **"cargo: command not found"**: Ensure Rust is installed and in your PATH
 - **"failed to find cargo.toml"**: Make sure `--project-path` points to a Rust project
 - **Server disconnects immediately**: Check that the binary path is absolute, not relative
+- **Server connects but no tools available**: This was a bug in v0.1.0 where the server included `"error": null` in successful responses, violating JSON-RPC 2.0 spec. Fixed in v0.1.1.
 
 ## Contributing
 
@@ -282,6 +283,11 @@ If you see connection errors in Claude Code:
 MIT License
 
 ## Changelog
+
+### v0.1.1 (fix/json-rpc-error-field)
+- Fixed JSON-RPC 2.0 compliance issue where `error: null` was incorrectly included in successful responses
+- This fix resolves connection issues with Claude Code where the server would connect but tools wouldn't be available
+- Added `#[serde(skip_serializing_if = "Option::is_none")]` to the error field in McpResponse
 
 ### v0.1.0
 - Initial release

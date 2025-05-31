@@ -14,6 +14,7 @@ pub struct McpResponse {
     pub jsonrpc: String,
     pub id: Option<Value>,
     pub result: Option<Value>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error: Option<Value>,
 }
 
